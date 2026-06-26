@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProSocial - Профессиональная соцсеть</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 800px;
+        }
+        .logo { font-size: 72px; font-weight: 800; margin-bottom: 20px; }
+        .subtitle { font-size: 24px; margin-bottom: 30px; opacity: 0.9; }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .feature-card h3 { margin-bottom: 10px; }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary { background: white; color: #667eea; }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 2px solid white; }
+        .status {
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            display: inline-block;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #4ade80;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .footer { margin-top: 40px; font-size: 12px; opacity: 0.6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🚀 ProSocial</div>
+        <div class="subtitle">Профессиональное комьюнити нового поколения</div>
+        
+        <div class="status">
+            <span class="status-dot"></span>
+            Сервер работает
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>💬 Живое общение</h3>
+                <p>Чат в реальном времени</p>
+            </div>
+            <div class="feature-card">
+                <h3>👥 Профессиональные связи</h3>
+                <p>Нетворкинг как в LinkedIn</p>
+            </div>
+            <div class="feature-card">
+                <h3>📦 Стартовые наборы</h3>
+                <p>Подписка на экспертов одним кликом</p>
+            </div>
+            <div class="feature-card">
+                <h3>🤖 Искусственный интеллект</h3>
+                <p>Модель Ollama для помощи</p>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a href="/admin/" class="btn btn-primary">🔐 Админка</a>
+            <a href="/api/" class="btn btn-secondary">📡 API</a>
+        </div>
+        
+        <div class="footer">© 2024 ProSocial. Сделано с ❤️</div>
+    </div>
+</body>
+</html>

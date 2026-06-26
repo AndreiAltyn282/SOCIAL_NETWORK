@@ -1,0 +1,31 @@
+============================================================
+ОТЧЕТ О ПРОВЕРКЕ ПРОЕКТА ProSocial
+Дата: 2026-06-25 08:47:12
+============================================================
+
+СТРУКТУРА ПРОЕКТА:
+  - notifications
+  - comments
+  - startup_packs
+  - posts
+  - ai
+  - subscriptions
+  - users
+  - messages_app
+
+МОДЕЛИ (8):
+  - notifications.Notification
+  - startup_packs.StartupPack
+  - startup_packs.UserStartupPack
+  - posts.Post
+  - posts.Comment
+  - subscriptions.Subscription
+  - messages_app.Conversation
+  - messages_app.Message
+
+ПРЕДУПРЕЖДЕНИЯ (5):
+  - Отсутствует рекомендуемый файл: README.md
+  - Отсутствует рекомендуемый файл: .gitignore
+  - Отсутствует рекомендуемый файл: docker-compose.yml
+  - Отсутствует рекомендуемый файл: Dockerfile
+  - Рекомендуется создать приложение: core
