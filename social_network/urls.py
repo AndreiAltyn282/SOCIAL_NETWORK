@@ -10,7 +10,7 @@ from users.views import UserViewSet
 from posts.views import PostViewSet, CommentViewSet
 from messages_app.views import ConversationViewSet, MessageViewSet
 from subscriptions.views import SubscriptionViewSet
-from startup_packs.views import StartupPackViewSet
+from startup_packs.views import StartupPackViewSet, PackPostViewSet
 from notifications.views import NotificationViewSet
 
 # Импорт из core
@@ -24,6 +24,7 @@ router.register(r'conversations', ConversationViewSet)
 router.register(r'messages', MessageViewSet)
 router.register(r'subscriptions', SubscriptionViewSet)
 router.register(r'startup-packs', StartupPackViewSet)
+router.register(r'pack-posts', PackPostViewSet)
 router.register(r'notifications', NotificationViewSet)
 
 urlpatterns = [

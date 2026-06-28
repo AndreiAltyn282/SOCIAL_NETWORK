@@ -8,6 +8,8 @@ from .models import Post
 from comments.models import Comment
 from .serializers import PostSerializer, PostCreateSerializer
 from comments.serializers import CommentSerializer
+from startup_packs.models import PackPost
+from datetime import datetime
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('-created_at')
@@ -37,6 +39,78 @@ class PostViewSet(viewsets.ModelViewSet):
                 models.Q(audience='subscribers', author__in=user.following.all())
             ).distinct()
         return queryset.filter(audience='public')
+
+    @action(detail=False, methods=['get'])
+    def feed(self, request):
+        """Лента с постами + постами из стартовых наборов"""
+        user = request.user
+        posts = []
+
+        # 1. Обычные посты
+        if user.is_authenticated:
+            user_posts = Post.objects.filter(
+                models.Q(audience='public') |
+                models.Q(author=user) |
+                models.Q(audience='subscribers', author__in=user.following.all())
+            ).distinct()
+        else:
+            user_posts = Post.objects.filter(audience='public')
+
+        for post in user_posts:
+            posts.append({
+                'id': f'post_{post.id}',
+                'type': 'post',
+                'created_at': post.created_at,
+                'author': {
+                    'id': post.author.id,
+                    'username': post.author.username,
+                    'avatar': post.author.avatar.url if post.author.avatar else None
+                },
+                'text': post.text,
+                'image': post.image.url if post.image else None,
+                'audience': post.audience,
+                'likes_count': post.likes_count,
+                'comments_count': post.comments_count,
+                'is_liked': post.likes.filter(id=user.id).exists() if user.is_authenticated else False,
+                'is_author': post.author == user,
+                'comments': [],
+                'source_name': None,
+                'is_ai_generated': False,
+                'pack_name': None
+            })
+
+        # 2. Посты из стартовых наборов, на которые подписан пользователь
+        if user.is_authenticated:
+            user_packs = user.startup_packs.all().values_list('pack_id', flat=True)
+            if user_packs:
+                pack_posts = PackPost.objects.filter(pack_id__in=user_packs).order_by('-published_at')[:20]
+                for pp in pack_posts:
+                    posts.append({
+                        'id': f'pack_{pp.id}',
+                        'type': 'pack_post',
+                        'created_at': pp.published_at,
+                        'author': {
+                            'id': user.id,
+                            'username': user.username,
+                            'avatar': user.avatar.url if user.avatar else None
+                        },
+                        'text': f'📦 {pp.title}\n\n{pp.content}\n\n🔗 Источник: {pp.source_name}',
+                        'image': None,
+                        'audience': 'public',
+                        'likes_count': 0,
+                        'comments_count': 0,
+                        'is_liked': False,
+                        'is_author': False,
+                        'comments': [],
+                        'source_name': pp.source_name,
+                        'is_ai_generated': pp.is_ai_generated,
+                        'pack_name': pp.pack.name
+                    })
+
+        # Сортируем по дате (новые сверху)
+        posts = sorted(posts, key=lambda x: x['created_at'], reverse=True)
+
+        return Response(posts)
 
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
@@ -69,7 +143,6 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# ДОБАВЛЯЕМ CommentViewSet ОБРАТНО
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('-created_at')
     serializer_class = CommentSerializer
